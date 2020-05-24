@@ -1,5 +1,6 @@
 package br.com.fastpizza.api;
 
+import br.com.fastpizza.entity.Cliente;
 import br.com.fastpizza.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,9 @@ public class ClienteRestController {
     private ClienteService clienteService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> buscar(@PathVariable Integer id) {
-        return (ResponseEntity<String>) clienteService.buscar(id);
+    public ResponseEntity<?> find(@PathVariable Integer id) {
+        Cliente cliente = clienteService.buscar(id);
+        return ResponseEntity.ok().body(cliente);
     }
 
 }
