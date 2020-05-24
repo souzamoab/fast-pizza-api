@@ -12,6 +12,10 @@ public class Cliente extends Usuario {
     private String pontoReferencia;
     private String complemento;
 
+    public Cliente() {
+
+    }
+
     public Cliente(Integer id, String nome, String cpf, ArrayList<String> telefones, String email, String senha, String rua, Integer numero, String bairro, String pontoReferencia, String complemento) {
         super(id, nome, cpf, telefones, email, senha);
         this.rua = rua;

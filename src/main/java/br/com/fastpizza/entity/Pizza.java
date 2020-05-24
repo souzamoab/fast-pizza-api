@@ -8,6 +8,10 @@ public class Pizza extends Produto {
     private String sabor;
     private String tamanho;
 
+    public Pizza() {
+
+    }
+
     public Pizza(Integer codigo, String nome, String descricao, double preco, String sabor, String tamanho) {
         super(codigo, nome, descricao, preco);
         this.sabor = sabor;
