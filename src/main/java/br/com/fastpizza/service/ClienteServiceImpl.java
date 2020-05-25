@@ -33,4 +33,10 @@ public class ClienteServiceImpl implements ClienteService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @Override
+    public ResponseEntity<?> inserir(Cliente cli) {
+        clienteRepository.save(cli);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cli);
+    }
 }

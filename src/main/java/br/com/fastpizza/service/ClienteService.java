@@ -6,5 +6,6 @@ import org.springframework.http.ResponseEntity;
 public interface ClienteService {
 
     ResponseEntity<?> buscar(Integer id);
+    ResponseEntity<?> inserir(Cliente cli);
 
 }
