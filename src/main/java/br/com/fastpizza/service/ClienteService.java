@@ -1,9 +1,10 @@
 package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Cliente;
+import org.springframework.http.ResponseEntity;
 
 public interface ClienteService {
 
-    Cliente buscar(Integer id);
+    ResponseEntity<?> buscar(Integer id);
 
 }

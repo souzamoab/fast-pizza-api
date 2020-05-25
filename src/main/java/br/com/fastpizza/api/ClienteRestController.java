@@ -15,8 +15,7 @@ public class ClienteRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> find(@PathVariable Integer id) {
-        Cliente cliente = clienteService.buscar(id);
-        return ResponseEntity.ok().body(cliente);
+        return clienteService.buscar(id);
     }
 
 }
