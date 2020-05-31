@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,13 +21,16 @@ public class ClienteService {
     @Value("${cliente.nao.encontrado}")
     private String clienteNaoEncontrado;
 
+    @Value("${cliente.ja.cadastrado}")
+    private String clienteCadastrado;
+
     public ResponseEntity<?> buscar(String cpf) {
         try {
-            Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
-            if(!Objects.isNull(cliente)) {
+            if(clienteRepository.existsByCpf(cpf)) {
+                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
                 return ResponseEntity.status(HttpStatus.OK).body(cliente);
             }else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente não encontrado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
             }
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -34,17 +38,30 @@ public class ClienteService {
     }
 
     public ResponseEntity<?> inserir(Cliente cli) {
-        clienteRepository.save(cli);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cli);
+        try {
+            if (clienteRepository.existsByCpf(cli.getCpf())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteCadastrado);
+            }else {
+                clienteRepository.save(cli);
+                return ResponseEntity.status(HttpStatus.CREATED).body(cli);
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
-    public ResponseEntity<?> deletar(Integer id) {
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-        if(Objects.isNull(cliente)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(clienteNaoEncontrado);
-        }else {
-            clienteRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(cliente);
+    @Transactional
+    public ResponseEntity<?> deletar(String cpf) {
+        try {
+            if(clienteRepository.existsByCpf(cpf)) {
+                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+                clienteRepository.deleteByCpf(cpf);
+                return ResponseEntity.status(HttpStatus.OK).body(cliente);
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

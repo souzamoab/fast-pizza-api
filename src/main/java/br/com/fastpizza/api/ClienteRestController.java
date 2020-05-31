@@ -23,9 +23,9 @@ public class ClienteRestController {
         return clienteService.buscar(cpf);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
-        return clienteService.deletar(id);
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<?> delete(@PathVariable String cpf) {
+        return clienteService.deletar(cpf);
     }
 
 }
