@@ -37,4 +37,14 @@ public class ClienteService {
         clienteRepository.save(cli);
         return ResponseEntity.status(HttpStatus.CREATED).body(cli);
     }
+
+    public ResponseEntity<?> deletar(Integer id) {
+        Optional<Cliente> cliente = clienteRepository.findById(id);
+        if(Objects.isNull(cliente)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(clienteNaoEncontrado);
+        }else {
+            clienteRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(cliente);
+        }
+    }
 }
