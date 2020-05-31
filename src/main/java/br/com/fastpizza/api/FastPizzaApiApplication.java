@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "br.com.fastpizza.api")
 @EntityScan(basePackages = "br.com.fastpizza.entity")
 @ComponentScan(basePackages = "br.com.fastpizza")
 @EnableJpaRepositories("br.com.fastpizza.repository")
