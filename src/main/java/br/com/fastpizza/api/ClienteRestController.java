@@ -18,9 +18,9 @@ public class ClienteRestController {
         return clienteService.inserir(cliente);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> find(@PathVariable Integer id) {
-        return clienteService.buscar(id);
+    @GetMapping("/{cpf}")
+    public ResponseEntity<?> find(@PathVariable String cpf) {
+        return clienteService.buscar(cpf);
     }
 
     @DeleteMapping("/{id}")

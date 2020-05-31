@@ -20,13 +20,13 @@ public class ClienteService {
     @Value("${cliente.nao.encontrado}")
     private String clienteNaoEncontrado;
 
-    public ResponseEntity<?> buscar(Integer id) {
+    public ResponseEntity<?> buscar(String cpf) {
         try {
-            Optional<Cliente> cliente = clienteRepository.findById(id);
-            if(Objects.isNull(cliente)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
-            }else {
+            Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+            if(!Objects.isNull(cliente)) {
                 return ResponseEntity.status(HttpStatus.OK).body(cliente);
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente não encontrado");
             }
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
