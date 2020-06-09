@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "br.com.fastpizza.entity")
 @ComponentScan(basePackages = "br.com.fastpizza")
 @EnableJpaRepositories("br.com.fastpizza.repository")
-@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 @PropertySource("classpath:/exception.properties")
 public class FastPizzaApiApplication {
 
