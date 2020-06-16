@@ -2,6 +2,7 @@ package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Cliente;
 import br.com.fastpizza.repository.ClienteRepository;
+import br.com.fastpizza.vo.ClienteVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,33 @@ public class ClienteService {
                 Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
                 clienteRepository.deleteByCpf(cpf);
                 return ResponseEntity.status(HttpStatus.OK).body(cliente);
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> atualizar(String cpf, ClienteVO clienteVO) {
+        try {
+            if(clienteRepository.existsByCpf(cpf)) {
+                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+
+                cliente.get().setNome(clienteVO.nome);
+                cliente.get().setTelefones(clienteVO.telefones);
+                cliente.get().setEmail(clienteVO.email);
+                cliente.get().setSenha(clienteVO.senha);
+                cliente.get().setRua(clienteVO.rua);
+                cliente.get().setNumero(clienteVO.numero);
+                cliente.get().setBairro(clienteVO.bairro);
+                cliente.get().setPontoReferencia(clienteVO.pontoReferencia);
+                cliente.get().setComplemento(clienteVO.complemento);
+
+                clienteRepository.save(cliente.get());
+
+                return ResponseEntity.status(HttpStatus.OK).body(cliente.get());
+
             }else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
             }
