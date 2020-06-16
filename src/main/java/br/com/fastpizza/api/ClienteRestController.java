@@ -14,18 +14,18 @@ public class ClienteRestController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody Cliente cliente) {
-        return clienteService.inserir(cliente);
+    public ResponseEntity<?> cadastrar(@RequestBody Cliente cliente) {
+        return clienteService.cadastrar(cliente);
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<?> find(@PathVariable String cpf) {
+    public ResponseEntity<?> buscar(@PathVariable String cpf) {
         return clienteService.buscar(cpf);
     }
 
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<?> delete(@PathVariable String cpf) {
-        return clienteService.deletar(cpf);
+    public ResponseEntity<?> remover(@PathVariable String cpf) {
+        return clienteService.remover(cpf);
     }
 
 }

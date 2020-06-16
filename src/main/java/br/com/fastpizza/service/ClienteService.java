@@ -37,7 +37,7 @@ public class ClienteService {
         }
     }
 
-    public ResponseEntity<?> inserir(Cliente cli) {
+    public ResponseEntity<?> cadastrar(Cliente cli) {
         try {
             if (clienteRepository.existsByCpf(cli.getCpf())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteCadastrado);
@@ -51,7 +51,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletar(String cpf) {
+    public ResponseEntity<?> remover(String cpf) {
         try {
             if(clienteRepository.existsByCpf(cpf)) {
                 Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
