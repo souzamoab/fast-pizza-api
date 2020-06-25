@@ -25,9 +25,22 @@ public class PizzaService {
         try {
             if (!Objects.isNull(pizza)){
                 pizzaRepository.save(pizza);
-                return ResponseEntity.status(HttpStatus.OK).body(pizza);
+                return ResponseEntity.status(HttpStatus.CREATED).body(pizza);
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> buscar(Integer codigo) {
+        try {
+            if (pizzaRepository.existsByCodigo(codigo)) {
+                Optional<Pizza> pizza = pizzaRepository.findByCodigo(codigo);
+                return ResponseEntity.status(HttpStatus.OK).body(pizza);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoCadastrada);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

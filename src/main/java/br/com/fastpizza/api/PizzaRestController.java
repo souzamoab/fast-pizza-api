@@ -18,6 +18,11 @@ public class PizzaRestController {
         return pizzaService.cadastrar(pizza);
     }
 
+    @GetMapping("/{codigo}")
+    public ResponseEntity<?> buscar(@PathVariable Integer codigo) {
+        return pizzaService.buscar(codigo);
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity<?> remover(@PathVariable Integer codigo) {
         return pizzaService.remover(codigo);
