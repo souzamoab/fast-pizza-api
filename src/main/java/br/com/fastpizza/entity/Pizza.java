@@ -12,8 +12,8 @@ public class Pizza extends Produto {
 
     }
 
-    public Pizza(Integer codigo, String nome, String descricao, double preco, String sabor, String tamanho) {
-        super(codigo, nome, descricao, preco);
+    public Pizza(Integer codigo, Categoria categoria, String descricao, double preco, String sabor, String tamanho) {
+        super(codigo, categoria, descricao, preco);
         this.sabor = sabor;
         this.tamanho = tamanho;
     }
