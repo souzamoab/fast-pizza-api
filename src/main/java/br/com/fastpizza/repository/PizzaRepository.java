@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface PizzaRepository extends JpaRepository<Pizza, Integer> {
 
-    Boolean existsByCodigo(Integer codigo);
+    boolean existsByCodigo(Integer codigo);
     Optional<Pizza> findByCodigo(Integer codigo);
     Optional<Pizza> findByNomeAndSabor(String nome, String sabor);
     void deleteByCodigo(Integer codigo);
