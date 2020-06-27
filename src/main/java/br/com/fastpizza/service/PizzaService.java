@@ -21,6 +21,8 @@ public class PizzaService {
     @Value("${pizza.nao.cadastrada}")
     private String pizzaNaoCadastrada;
 
+    //TODO: Corrigir cadastrar de pizza para verificar se já existe no banco.
+
     public ResponseEntity<?> cadastrar(Pizza pizza) {
         try {
             if (!Objects.isNull(pizza)){
