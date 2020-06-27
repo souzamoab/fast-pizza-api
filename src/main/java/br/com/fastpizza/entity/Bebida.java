@@ -13,7 +13,7 @@ public class Bebida extends Produto {
 
     }
 
-    public Bebida(Integer codigo, Categoria categoria, String descricao, double preco, String sabor, String marca, String quantidade) {
+    public Bebida(Integer codigo, String categoria, String descricao, double preco, String sabor, String marca, String quantidade) {
         super(codigo, categoria, descricao, preco);
         this.sabor = sabor;
         this.marca = marca;

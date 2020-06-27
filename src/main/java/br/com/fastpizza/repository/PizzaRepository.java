@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface PizzaRepository extends JpaRepository<Pizza, Integer> {
 
     boolean existsByCodigo(Integer codigo);
+    boolean existsByCategoriaAndSabor(String categoria, String sabor);
     Optional<Pizza> findByCodigo(Integer codigo);
-    Optional<Pizza> findByNomeAndSabor(String nome, String sabor);
     void deleteByCodigo(Integer codigo);
 
 }

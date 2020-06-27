@@ -1,6 +1,7 @@
 package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Pizza;
+import br.com.fastpizza.repository.CategoriaRepository;
 import br.com.fastpizza.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Objects;
+
 import java.util.Optional;
 
 @Service
@@ -18,18 +19,33 @@ public class PizzaService {
     @Autowired
     private PizzaRepository pizzaRepository;
 
-    @Value("${pizza.nao.cadastrada}")
-    private String pizzaNaoCadastrada;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
-    //TODO: Corrigir cadastrar de pizza para verificar se já existe no banco.
+    @Value("${pizza.categoria}")
+    private String pizzaCategoria;
+
+    @Value("${pizza.nao.encontrada}")
+    private String pizzaNaoEncontrada;
+
+    @Value("${pizza.ja.cadastrada}")
+    private String pizzaJaCadastrada;
+
+    @Value("${categoria.nao.encontrada}")
+    private String categoriaNaoEncontrada;
 
     public ResponseEntity<?> cadastrar(Pizza pizza) {
         try {
-            if (!Objects.isNull(pizza)){
+            if (!pizzaRepository.existsByCategoriaAndSabor(pizza.getCategoria(), pizza.getSabor()) && categoriaRepository.existsByNome(pizza.getCategoria())
+                    && pizza.getCategoria().equals(pizzaCategoria)){
                 pizzaRepository.save(pizza);
                 return ResponseEntity.status(HttpStatus.CREATED).body(pizza);
+            } else if (!pizzaRepository.existsByCategoriaAndSabor(pizza.getCategoria(), pizza.getSabor())
+                    && !categoriaRepository.existsByNome(pizza.getCategoria())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(categoriaNaoEncontrada);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaJaCadastrada);
             }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -41,7 +57,7 @@ public class PizzaService {
                 Optional<Pizza> pizza = pizzaRepository.findByCodigo(codigo);
                 return ResponseEntity.status(HttpStatus.OK).body(pizza);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoCadastrada);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoEncontrada);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -56,7 +72,7 @@ public class PizzaService {
                 pizzaRepository.deleteByCodigo(codigo);
                 return ResponseEntity.status(HttpStatus.OK).body(pizza);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoCadastrada);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoEncontrada);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
