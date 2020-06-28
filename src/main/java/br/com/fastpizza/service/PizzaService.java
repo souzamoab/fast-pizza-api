@@ -16,6 +16,8 @@ import java.util.Optional;
 @Service
 public class PizzaService {
 
+    //TODO: Implementar envio de imagem no cadastro de Pizza
+
     @Autowired
     private PizzaRepository pizzaRepository;
 
