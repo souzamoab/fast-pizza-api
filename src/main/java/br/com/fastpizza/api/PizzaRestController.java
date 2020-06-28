@@ -23,6 +23,11 @@ public class PizzaRestController {
         return pizzaService.buscar(codigo);
     }
 
+    @GetMapping
+    public ResponseEntity<?> buscar(@RequestParam String categoria, @RequestParam String sabor) {
+        return pizzaService.buscar(categoria, sabor);
+    }
+
     @DeleteMapping("/{codigo}")
     public ResponseEntity<?> remover(@PathVariable Integer codigo) {
         return pizzaService.remover(codigo);

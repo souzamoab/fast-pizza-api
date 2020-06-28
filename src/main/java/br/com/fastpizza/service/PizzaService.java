@@ -66,6 +66,19 @@ public class PizzaService {
         }
     }
 
+    public ResponseEntity<?> buscar(String categoria, String sabor) {
+        try {
+            if (pizzaRepository.existsByCategoriaAndSabor(categoria, sabor)) {
+                Optional<Pizza> pizza = pizzaRepository.findByCategoriaAndSabor(categoria, sabor);
+                return ResponseEntity.status(HttpStatus.OK).body(pizza);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
     @Transactional
     public ResponseEntity<?> remover(Integer codigo) {
         try {
