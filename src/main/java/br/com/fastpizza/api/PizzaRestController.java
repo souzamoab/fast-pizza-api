@@ -23,8 +23,8 @@ public class PizzaRestController {
         return pizzaService.buscar(codigo);
     }
 
-    @GetMapping
-    public ResponseEntity<?> buscar(@RequestParam String categoria, @RequestParam String sabor) {
+    @GetMapping("/{categoria}")
+    public ResponseEntity<?> buscar(@PathVariable String categoria, @RequestParam String sabor) {
         return pizzaService.buscar(categoria, sabor);
     }
 
