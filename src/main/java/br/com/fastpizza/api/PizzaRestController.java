@@ -23,9 +23,14 @@ public class PizzaRestController {
         return pizzaService.buscar(codigo);
     }
 
-    @GetMapping("/{categoria}")
-    public ResponseEntity<?> buscar(@PathVariable String categoria, @RequestParam String sabor) {
-        return pizzaService.buscar(categoria, sabor);
+//    @GetMapping
+//    public ResponseEntity<?> buscar(@RequestParam String categoria, @RequestParam String sabor) {
+//        return pizzaService.buscar(categoria, sabor);
+//    }
+
+    @GetMapping
+    public ResponseEntity<?> listar() {
+        return pizzaService.listar();
     }
 
     @DeleteMapping("/{codigo}")

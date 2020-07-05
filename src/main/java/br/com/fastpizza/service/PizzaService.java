@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -88,6 +89,19 @@ public class PizzaService {
                 return ResponseEntity.status(HttpStatus.OK).body(pizza);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pizzaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> listar() {
+        try {
+            if (!pizzaRepository.findAll().isEmpty()) {
+                List<Pizza> pizzas = pizzaRepository.findAll();
+                return ResponseEntity.status(HttpStatus.OK).body(pizzas);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
