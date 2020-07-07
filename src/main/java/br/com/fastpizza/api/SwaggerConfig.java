@@ -33,7 +33,7 @@ public class SwaggerConfig {
                 .build();
     }
 
-    protected void addResourcesHandlers(ResourceHandlerRegistry registry) {
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
