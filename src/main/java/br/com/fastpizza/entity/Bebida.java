@@ -5,35 +5,25 @@ import javax.persistence.Entity;
 @Entity
 public class Bebida extends Produto {
 
-    private String sabor;
-    private String marca;
+    private String nome;
     private String quantidade;
 
     public Bebida() {
 
     }
 
-    public Bebida(Integer codigo, String categoria, String descricao, double preco, String sabor, String marca, String quantidade) {
+    public Bebida(Integer codigo, String categoria, String descricao, double preco, String nome, String quantidade) {
         super(codigo, categoria, descricao, preco);
-        this.sabor = sabor;
-        this.marca = marca;
+        this.nome = nome;
         this.quantidade = quantidade;
     }
 
-    public String getSabor() {
-        return sabor;
+    public String getNome() {
+        return nome;
     }
 
-    public void setSabor(String sabor) {
-        this.sabor = sabor;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getQuantidade() {
