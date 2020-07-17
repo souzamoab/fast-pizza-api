@@ -28,4 +28,9 @@ public class BebidaRestController {
         return bebidaService.buscar(categoria, nome);
     }
 
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity<?> remover(@PathVariable Integer codigo) {
+        return bebidaService.remover(codigo);
+    }
+
 }

@@ -1,6 +1,7 @@
 package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Bebida;
+import br.com.fastpizza.entity.Pizza;
 import br.com.fastpizza.repository.BebidaRepository;
 import br.com.fastpizza.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -65,6 +67,21 @@ public class BebidaService {
         try {
             if (bebidaRepository.existsByCategoriaAndNome(categoria, nome)) {
                 Optional<Bebida> bebida = bebidaRepository.findByCategoriaAndNome(categoria, nome);
+                return ResponseEntity.status(HttpStatus.OK).body(bebida);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bebidaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<?> remover(Integer codigo) {
+        try {
+            if (bebidaRepository.existsByCodigo(codigo)) {
+                Optional<Bebida> bebida = bebidaRepository.findByCodigo(codigo);
+                bebidaRepository.deleteByCodigo(codigo);
                 return ResponseEntity.status(HttpStatus.OK).body(bebida);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bebidaNaoEncontrada);

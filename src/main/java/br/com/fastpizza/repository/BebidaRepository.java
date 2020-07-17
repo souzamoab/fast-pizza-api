@@ -13,5 +13,6 @@ public interface BebidaRepository extends JpaRepository<Bebida, Integer> {
     Boolean existsByCategoriaAndNome(String categoria, String nome);
     Optional<Bebida> findByCodigo(Integer codigo);
     Optional<Bebida> findByCategoriaAndNome(String categoria, String nome);
+    void deleteByCodigo(Integer codigo);
 
 }
