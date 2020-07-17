@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BebidaService {
 
@@ -45,5 +47,20 @@ public class BebidaService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    public ResponseEntity<?> buscar(Integer codigo) {
+        try {
+            if (bebidaRepository.existsByCodigo(codigo)) {
+                Optional<Bebida> bebida = bebidaRepository.findByCodigo(codigo);
+                return ResponseEntity.status(HttpStatus.OK).body(bebida);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bebidaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
 
 }
