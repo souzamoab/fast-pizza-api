@@ -18,6 +18,11 @@ public class BebidaRestController {
         return bebidaService.cadastrar(bebida);
     }
 
+    @GetMapping
+    public ResponseEntity<?> listar() {
+        return bebidaService.listar();
+    }
+
     @GetMapping("/{codigo}")
     public ResponseEntity<?> buscar(@PathVariable Integer codigo) {
         return bebidaService.buscar(codigo);

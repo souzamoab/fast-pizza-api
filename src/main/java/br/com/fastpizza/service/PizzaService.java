@@ -37,6 +37,9 @@ public class PizzaService {
     @Value("${categoria.nao.encontrada}")
     private String categoriaNaoEncontrada;
 
+    @Value("${nenhuma.pizza.cadastrada}")
+    private String emptyPizzas;
+
     public ResponseEntity<?> cadastrar(Pizza pizza) {
         try {
             if (!pizzaRepository.existsByCategoriaAndSabor(pizza.getCategoria(), pizza.getSabor()) && categoriaRepository.existsByNome(pizza.getCategoria())
@@ -101,7 +104,7 @@ public class PizzaService {
                 List<Pizza> pizzas = pizzaRepository.findAll();
                 return ResponseEntity.status(HttpStatus.OK).body(pizzas);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(emptyPizzas);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

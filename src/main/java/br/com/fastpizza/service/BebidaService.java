@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,9 @@ public class BebidaService {
 
     @Value("${categoria.nao.encontrada}")
     private String categoriaNaoEncontrada;
+
+    @Value("${nenhuma.bebida.cadastrada}")
+    private String emptyBebidas;
 
     public ResponseEntity<?> cadastrar(Bebida bebida) {
         try {
@@ -85,6 +89,19 @@ public class BebidaService {
                 return ResponseEntity.status(HttpStatus.OK).body(bebida);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bebidaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> listar() {
+        try {
+            if (!bebidaRepository.findAll().isEmpty()) {
+                List<Bebida> bebidas = bebidaRepository.findAll();
+                return ResponseEntity.status(HttpStatus.OK).body(bebidas);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(emptyBebidas);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
