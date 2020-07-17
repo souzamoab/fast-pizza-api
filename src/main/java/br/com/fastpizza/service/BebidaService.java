@@ -61,6 +61,17 @@ public class BebidaService {
         }
     }
 
-
+    public ResponseEntity<?> buscar(String categoria, String nome) {
+        try {
+            if (bebidaRepository.existsByCategoriaAndNome(categoria, nome)) {
+                Optional<Bebida> bebida = bebidaRepository.findByCategoriaAndNome(categoria, nome);
+                return ResponseEntity.status(HttpStatus.OK).body(bebida);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bebidaNaoEncontrada);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
 }

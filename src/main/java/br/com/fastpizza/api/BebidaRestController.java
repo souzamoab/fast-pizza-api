@@ -23,4 +23,9 @@ public class BebidaRestController {
         return bebidaService.buscar(codigo);
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<?> buscar(@RequestParam String categoria, @RequestParam String nome) {
+        return bebidaService.buscar(categoria, nome);
+    }
+
 }

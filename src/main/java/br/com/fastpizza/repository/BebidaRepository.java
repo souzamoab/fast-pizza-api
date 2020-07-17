@@ -12,5 +12,6 @@ public interface BebidaRepository extends JpaRepository<Bebida, Integer> {
     Boolean existsByCodigo(Integer codigo);
     Boolean existsByCategoriaAndNome(String categoria, String nome);
     Optional<Bebida> findByCodigo(Integer codigo);
+    Optional<Bebida> findByCategoriaAndNome(String categoria, String nome);
 
 }
