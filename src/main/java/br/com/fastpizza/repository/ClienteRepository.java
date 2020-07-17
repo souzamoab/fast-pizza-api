@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     Optional<Cliente> findByCpf(String cpf);
-    boolean existsByCpf(String cpf);
+    Boolean existsByCpf(String cpf);
     void deleteByCpf(String cpf);
 
 }
