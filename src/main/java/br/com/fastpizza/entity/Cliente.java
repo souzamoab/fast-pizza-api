@@ -1,67 +1,90 @@
 package br.com.fastpizza.entity;
 
+import br.com.fastpizza.enums.TipoClienteEnum;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Entity
-public class Cliente extends Usuario {
+public class Cliente implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private String rua;
-    private Integer numero;
-    private String bairro;
-    private String pontoReferencia;
-    private String complemento;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String nome;
+    private String email;
+    private String cpf;
+    private TipoClienteEnum tipo;
 
     public Cliente() {
 
     }
 
-    public Cliente(Integer id, String nome, String cpf, ArrayList<String> telefones, String email, String senha, String rua, Integer numero, String bairro, String pontoReferencia, String complemento) {
-        super(id, nome, cpf, telefones, email, senha);
-        this.rua = rua;
-        this.numero = numero;
-        this.bairro = bairro;
-        this.pontoReferencia = pontoReferencia;
-        this.complemento = complemento;
+    public Cliente(Integer id, String nome, String email, String cpf, TipoClienteEnum tipo) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.tipo = tipo;
     }
 
-    public String getRua() {
-        return rua;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getNumero() {
-        return numero;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNumero(Integer numero) {
-        this.numero = numero;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getBairro() {
-        return bairro;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPontoReferencia() {
-        return pontoReferencia;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setPontoReferencia(String pontoReferencia) {
-        this.pontoReferencia = pontoReferencia;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
-    public String getComplemento() {
-        return complemento;
+    public TipoClienteEnum getTipo() {
+        return tipo;
     }
 
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
+    public void setTipo(TipoClienteEnum tipo) {
+        this.tipo = tipo;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }
