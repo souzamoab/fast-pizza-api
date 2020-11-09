@@ -72,14 +72,7 @@ public class ClienteService {
                 Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
 
                 cliente.get().setNome(clienteVO.nome);
-                cliente.get().setTelefones(clienteVO.telefones);
                 cliente.get().setEmail(clienteVO.email);
-                cliente.get().setSenha(clienteVO.senha);
-                cliente.get().setRua(clienteVO.rua);
-                cliente.get().setNumero(clienteVO.numero);
-                cliente.get().setBairro(clienteVO.bairro);
-                cliente.get().setPontoReferencia(clienteVO.pontoReferencia);
-                cliente.get().setComplemento(clienteVO.complemento);
 
                 clienteRepository.save(cliente.get());
 

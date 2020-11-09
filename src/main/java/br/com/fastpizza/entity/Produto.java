@@ -1,63 +1,50 @@
 package br.com.fastpizza.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@MappedSuperclass
+@Entity
 public class Produto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer codigo;
-    private String categoria;
-    private String descricao;
-    private double preco;
+    private Integer id;
+    private String nome;
+    private Double preco;
 
     public Produto() {
 
     }
 
-    public Produto(Integer codigo, String categoria, String descricao, double preco) {
-        this.codigo = codigo;
-        this.categoria = categoria;
-        this.descricao = descricao;
+    public Produto(Integer id, String nome, Double preco) {
+        this.id = id;
+        this.nome = nome;
         this.preco = preco;
     }
 
-    public Integer getCodigo() {
-        return codigo;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getNome() {
+        return nome;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public double getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
 
@@ -66,12 +53,12 @@ public class Produto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Produto produto = (Produto) o;
-        return Objects.equals(codigo, produto.codigo);
+        return Objects.equals(id, produto.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codigo);
+        return Objects.hash(id);
     }
 
 }
