@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class CategoriaRestController {
 
     @Autowired
-    private CategoriaService categoriaService;
+    public CategoriaService categoriaService;
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody Categoria categoria) {

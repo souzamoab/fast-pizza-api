@@ -2,6 +2,8 @@ package br.com.fastpizza.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +15,14 @@ public class Produto implements Serializable {
     private Integer id;
     private String nome;
     private Double preco;
+
+    @ManyToMany
+    @JoinTable(
+            name = "PRODUTO_CATEGORIA",
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private List<Categoria> categorias = new ArrayList<>();
 
     public Produto() {
 
@@ -46,6 +56,14 @@ public class Produto implements Serializable {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 
     @Override
