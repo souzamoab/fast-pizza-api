@@ -2,13 +2,9 @@ package br.com.fastpizza.entity;
 
 import br.com.fastpizza.enums.TipoClienteEnum;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Cliente implements Serializable {
@@ -20,7 +16,14 @@ public class Cliente implements Serializable {
     private String nome;
     private String email;
     private String cpf;
-    private TipoClienteEnum tipo;
+    private Integer tipo;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "TELEFONE")
+    private Set<String> telefones = new HashSet<>();
 
     public Cliente() {
 
@@ -31,7 +34,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
-        this.tipo = tipo;
+        this.tipo = tipo.getCodigo();
     }
 
     public Integer getId() {
@@ -67,11 +70,27 @@ public class Cliente implements Serializable {
     }
 
     public TipoClienteEnum getTipo() {
-        return tipo;
+        return TipoClienteEnum.toEnum(tipo);
     }
 
     public void setTipo(TipoClienteEnum tipo) {
-        this.tipo = tipo;
+        this.tipo = tipo.getCodigo();
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public Set<String> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(Set<String> telefones) {
+        this.telefones = telefones;
     }
 
     @Override
@@ -86,5 +105,4 @@ public class Cliente implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }
