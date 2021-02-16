@@ -2,8 +2,11 @@ package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Categoria;
 import br.com.fastpizza.repository.CategoriaRepository;
+import br.com.fastpizza.services.exception.DataIntegrityException;
+import br.com.fastpizza.vo.CategoriaUpdateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,6 +50,39 @@ public class CategoriaServiceImpl implements CategoriaService {
             }
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> update(Integer id, CategoriaUpdateVO categoriaUpdateVO) {
+        try {
+            if(categoriaRepository.existsById(id)) {
+                Optional<Categoria> categoria = categoriaRepository.findById(id);
+
+                categoria.get().setNome(categoriaUpdateVO.nome);
+
+                categoriaRepository.save(categoria.get());
+
+                return ResponseEntity.status(HttpStatus.OK).body(categoria.get());
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(categoriaNaoEncontrada);
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> delete(Integer id) {
+        try {
+            if(categoriaRepository.existsById(id)) {
+                categoriaRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(categoriaNaoEncontrada);
+            }
+        }catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
         }
     }
 
