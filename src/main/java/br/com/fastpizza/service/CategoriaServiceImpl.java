@@ -4,6 +4,7 @@ import br.com.fastpizza.entity.Categoria;
 import br.com.fastpizza.repository.CategoriaRepository;
 import br.com.fastpizza.services.exception.DataIntegrityException;
 import br.com.fastpizza.vo.CategoriaUpdateVO;
+import br.com.fastpizza.vo.CategoriaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
@@ -40,7 +44,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public ResponseEntity<?> listar(Integer id) {
+    public ResponseEntity<?> buscar(Integer id) {
         try {
             if(categoriaRepository.existsById(id)) {
                 Optional<Categoria> categoria = categoriaRepository.findById(id);
@@ -83,6 +87,17 @@ public class CategoriaServiceImpl implements CategoriaService {
             }
         }catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> listar() {
+        try {
+            List<Categoria> categorias = categoriaRepository.findAll();
+            List<CategoriaVO> categoriasVO = categorias.stream().map(CategoriaVO::new).collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.OK).body(categoriasVO);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

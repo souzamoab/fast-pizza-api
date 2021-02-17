@@ -20,8 +20,8 @@ public class CategoriaRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> listar(@PathVariable Integer id) {
-        return categoriaService.listar(id);
+    public ResponseEntity<?> buscar(@PathVariable Integer id) {
+        return categoriaService.buscar(id);
     }
 
     @PutMapping("/{id}")
@@ -32,6 +32,11 @@ public class CategoriaRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         return categoriaService.delete(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> listar() {
+        return categoriaService.listar();
     }
 
 }
