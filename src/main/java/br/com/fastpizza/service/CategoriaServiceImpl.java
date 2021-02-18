@@ -8,6 +8,9 @@ import br.com.fastpizza.vo.CategoriaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -99,6 +102,14 @@ public class CategoriaServiceImpl implements CategoriaService {
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    @Override
+    public ResponseEntity<?> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Page<Categoria> categorias = categoriaRepository.findAll(pageRequest);
+        Page<CategoriaVO> categoriasVO =  categorias.map(CategoriaVO::new);
+        return ResponseEntity.status(HttpStatus.OK).body(categoriasVO);
     }
 
 }

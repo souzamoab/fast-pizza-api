@@ -3,7 +3,9 @@ package br.com.fastpizza.api;
 import br.com.fastpizza.entity.Categoria;
 import br.com.fastpizza.service.CategoriaService;
 import br.com.fastpizza.vo.CategoriaUpdateVO;
+import br.com.fastpizza.vo.CategoriaVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,15 @@ public class CategoriaRestController {
     @GetMapping
     public ResponseEntity<?> listar() {
         return categoriaService.listar();
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<?> findPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+        return categoriaService.findPage(page, linesPerPage, orderBy, direction);
     }
 
 }
