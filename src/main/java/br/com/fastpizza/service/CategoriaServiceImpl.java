@@ -3,8 +3,8 @@ package br.com.fastpizza.service;
 import br.com.fastpizza.entity.Categoria;
 import br.com.fastpizza.repository.CategoriaRepository;
 import br.com.fastpizza.services.exception.DataIntegrityException;
-import br.com.fastpizza.vo.CategoriaUpdateVO;
-import br.com.fastpizza.vo.CategoriaVO;
+import br.com.fastpizza.vo.CategoriaUpdateDTO;
+import br.com.fastpizza.vo.CategoriaInputDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,8 +32,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     private String categoriaNaoEncontrada;
 
     @Override
-    public ResponseEntity<?> cadastrar(Categoria categoria) {
+    public ResponseEntity<?> cadastrar(CategoriaInputDTO categoriaInputDTO) {
         try {
+            Categoria categoria = fromDTO(categoriaInputDTO);
             if(!categoriaRepository.existsByNome(categoria.getNome())) {
                 categoriaRepository.save(categoria);
                 return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
@@ -61,12 +61,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public ResponseEntity<?> update(Integer id, CategoriaUpdateVO categoriaUpdateVO) {
+    public ResponseEntity<?> update(Integer id, CategoriaUpdateDTO categoriaUpdateDTO) {
         try {
             if(categoriaRepository.existsById(id)) {
                 Optional<Categoria> categoria = categoriaRepository.findById(id);
 
-                categoria.get().setNome(categoriaUpdateVO.nome);
+                categoria.get().setNome(categoriaUpdateDTO.nome);
 
                 categoriaRepository.save(categoria.get());
 
@@ -97,7 +97,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public ResponseEntity<?> listar() {
         try {
             List<Categoria> categorias = categoriaRepository.findAll();
-            List<CategoriaVO> categoriasVO = categorias.stream().map(CategoriaVO::new).collect(Collectors.toList());
+            List<CategoriaInputDTO> categoriasVO = categorias.stream().map(CategoriaInputDTO::new).collect(Collectors.toList());
             return ResponseEntity.status(HttpStatus.OK).body(categoriasVO);
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -108,8 +108,13 @@ public class CategoriaServiceImpl implements CategoriaService {
     public ResponseEntity<?> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         Page<Categoria> categorias = categoriaRepository.findAll(pageRequest);
-        Page<CategoriaVO> categoriasVO =  categorias.map(CategoriaVO::new);
+        Page<CategoriaInputDTO> categoriasVO =  categorias.map(CategoriaInputDTO::new);
         return ResponseEntity.status(HttpStatus.OK).body(categoriasVO);
+    }
+
+    @Override
+    public Categoria fromDTO(CategoriaInputDTO categoriaInputDTO) {
+        return new Categoria(categoriaInputDTO.getId(), categoriaInputDTO.getNome());
     }
 
 }

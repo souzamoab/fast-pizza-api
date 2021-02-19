@@ -1,19 +1,24 @@
 package br.com.fastpizza.vo;
 
 import br.com.fastpizza.entity.Categoria;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
-public class CategoriaVO implements Serializable {
+public class CategoriaInputDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+
+    @NotEmpty(message = "Preenchimento obrigatório")
+    @Length(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80 caracteres")
     private String nome;
 
-    public CategoriaVO() {
+    public CategoriaInputDTO() {
     }
 
-    public CategoriaVO(Categoria categoria) {
+    public CategoriaInputDTO(Categoria categoria) {
         id = categoria.getId();
         nome = categoria.getNome();
     }

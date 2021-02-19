@@ -1,13 +1,13 @@
 package br.com.fastpizza.api;
 
-import br.com.fastpizza.entity.Categoria;
 import br.com.fastpizza.service.CategoriaService;
-import br.com.fastpizza.vo.CategoriaUpdateVO;
-import br.com.fastpizza.vo.CategoriaVO;
+import br.com.fastpizza.vo.CategoriaUpdateDTO;
+import br.com.fastpizza.vo.CategoriaInputDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/fastpizza/categorias")
@@ -17,8 +17,8 @@ public class CategoriaRestController {
     public CategoriaService categoriaService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Categoria categoria) {
-        return categoriaService.cadastrar(categoria);
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody CategoriaInputDTO categoriaInputDTO) {
+        return categoriaService.cadastrar(categoriaInputDTO);
     }
 
     @GetMapping("/{id}")
@@ -27,8 +27,8 @@ public class CategoriaRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CategoriaUpdateVO categoriaUpdateVO) {
-        return categoriaService.update(id, categoriaUpdateVO);
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody CategoriaUpdateDTO categoriaUpdateDTO) {
+        return categoriaService.update(id, categoriaUpdateDTO);
     }
 
     @DeleteMapping("/{id}")
