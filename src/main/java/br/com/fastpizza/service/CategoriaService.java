@@ -1,18 +1,17 @@
 package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Categoria;
-import br.com.fastpizza.vo.CategoriaUpdateDTO;
-import br.com.fastpizza.vo.CategoriaInputDTO;
+import br.com.fastpizza.vo.CategoriaDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface CategoriaService {
 
-    ResponseEntity<?> cadastrar(CategoriaInputDTO categoriaInputDTO);
+    ResponseEntity<?> cadastrar(CategoriaDTO categoriaDTO);
     ResponseEntity<?> buscar(Integer id);
-    ResponseEntity<?> update(Integer id, CategoriaUpdateDTO categoriaUpdateDTO);
+    ResponseEntity<?> update(Integer id, CategoriaDTO categoriaDTO);
     ResponseEntity<?> delete(Integer id);
     ResponseEntity<?> listar();
     ResponseEntity<?> findPage(Integer page, Integer linesPerPage, String orderBy, String direction);
-    Categoria fromDTO(CategoriaInputDTO categoriaInputDTO);
+    Categoria fromDTO(CategoriaDTO categoriaDTO);
 
 }

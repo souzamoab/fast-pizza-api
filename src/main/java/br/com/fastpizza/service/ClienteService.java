@@ -1,17 +1,24 @@
 package br.com.fastpizza.service;
 
 import br.com.fastpizza.entity.Cliente;
+import br.com.fastpizza.entity.Cliente;
 import br.com.fastpizza.repository.ClienteRepository;
-import br.com.fastpizza.vo.ClienteVO;
+import br.com.fastpizza.services.exception.DataIntegrityException;
+import br.com.fastpizza.vo.ClienteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -25,10 +32,10 @@ public class ClienteService {
     @Value("${cliente.ja.cadastrado}")
     private String clienteCadastrado;
 
-    public ResponseEntity<?> buscar(String cpf) {
+    public ResponseEntity<?> buscar(Integer id) {
         try {
-            if(clienteRepository.existsByCpf(cpf)) {
-                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+            if(clienteRepository.existsById(id)) {
+                Optional<Cliente> cliente = clienteRepository.findById(id);
                 return ResponseEntity.status(HttpStatus.OK).body(cliente);
             }else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
@@ -51,28 +58,26 @@ public class ClienteService {
         }
     }
 
-    @Transactional
-    public ResponseEntity<?> remover(String cpf) {
+    public ResponseEntity<?> delete(Integer id) {
         try {
-            if(clienteRepository.existsByCpf(cpf)) {
-                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
-                clienteRepository.deleteByCpf(cpf);
-                return ResponseEntity.status(HttpStatus.OK).body(cliente);
+            if(clienteRepository.existsById(id)) {
+                clienteRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteNaoEncontrado);
             }
-        }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possível excluir porque há entidades relacionadas.");
         }
     }
 
-    public ResponseEntity<?> atualizar(String cpf, ClienteVO clienteVO) {
+    public ResponseEntity<?> update(Integer id, ClienteDTO clienteDTO) {
         try {
-            if(clienteRepository.existsByCpf(cpf)) {
-                Optional<Cliente> cliente = clienteRepository.findByCpf(cpf);
+            if(clienteRepository.existsById(id)) {
+                Optional<Cliente> cliente = clienteRepository.findById(id);
 
-                cliente.get().setNome(clienteVO.nome);
-                cliente.get().setEmail(clienteVO.email);
+                cliente.get().setNome(clienteDTO.getNome());
+                cliente.get().setEmail(clienteDTO.getEmail());
 
                 clienteRepository.save(cliente.get());
 
@@ -85,4 +90,26 @@ public class ClienteService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    public ResponseEntity<?> listar() {
+        try {
+            List<Cliente> clientes = clienteRepository.findAll();
+            List<ClienteDTO> clientesDTO = clientes.stream().map(ClienteDTO::new).collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.OK).body(clientesDTO);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Page<Cliente> clientes = clienteRepository.findAll(pageRequest);
+        Page<ClienteDTO> clientesDTO =  clientes.map(ClienteDTO::new);
+        return ResponseEntity.status(HttpStatus.OK).body(clientesDTO);
+    }
+
+    public Cliente fromDTO(ClienteDTO clienteDTO) {
+        return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
+    }
+
 }
